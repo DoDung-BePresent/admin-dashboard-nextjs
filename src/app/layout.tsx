@@ -61,6 +61,8 @@ export default function RootLayout({
               },
               Upload: {
                 colorPrimaryHover: colors.primary500,
+                colorPrimary: colors.primary500,
+                colorPrimaryBorder: colors.primary500,
               },
               Form: {
                 itemMarginBottom: 22,
