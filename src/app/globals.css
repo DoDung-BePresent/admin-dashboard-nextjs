@@ -91,4 +91,40 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  h1 {
+    @apply text-6xl;
+  }
+
+  h2 {
+    @apply text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-lg;
+  }
+}
+
+@layer components {
+  .section-lg {
+    @apply my-20;
+  }
+
+  .section-md {
+    @apply my-10;
+  }
+
+  .section-sm {
+    @apply my-5;
+  }
+}
+
+/* Additional CSS */
+
+.ant-form-item-label {
+  font-weight: 500;
 }

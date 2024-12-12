@@ -17,6 +17,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function NavMain({
   items,
@@ -29,6 +31,7 @@ export function NavMain({
     items?: {
       title: string;
       url: string;
+      isActive: boolean;
     }[];
   }[];
 }) {
@@ -56,9 +59,14 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link
+                          href={subItem.url}
+                          className={cn({
+                            "bg-sidebar-accent": subItem.isActive === true,
+                          })}
+                        >
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

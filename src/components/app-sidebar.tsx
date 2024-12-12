@@ -60,14 +60,17 @@ const data = {
         {
           title: "History",
           url: "#",
+          isActive: false,
         },
         {
           title: "Starred",
           url: "#",
+          isActive: false,
         },
         {
           title: "Settings",
           url: "#",
+          isActive: false,
         },
       ],
     },
@@ -79,18 +82,22 @@ const data = {
         {
           title: "List",
           url: "#",
+          isActive: false,
         },
         {
           title: "Colors & Sizes",
           url: "#",
+          isActive: false,
         },
         {
           title: "Category",
           url: "#",
+          isActive: false,
         },
         {
           title: "Add new product",
-          url: "#",
+          url: "/stores/dfgd/products/add",
+          isActive: true,
         },
       ],
     },
