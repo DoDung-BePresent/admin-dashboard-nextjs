@@ -8,6 +8,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  LayoutDashboard,
   Map,
   PieChart,
   Settings2,
@@ -85,18 +86,25 @@ const data = {
           isActive: false,
         },
         {
-          title: "Colors & Sizes",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Category",
-          url: "#",
-          isActive: false,
-        },
-        {
           title: "Add new product",
           url: "/stores/dfgd/products/add",
+          isActive: true,
+        },
+      ],
+    },
+    {
+      title: "Categories",
+      url: "#",
+      icon: LayoutDashboard,
+      items: [
+        {
+          title: "List",
+          url: "/stores/dfgd/categories",
+          isActive: false,
+        },
+        {
+          title: "Add new category",
+          url: "/stores/dfgd/categories/add",
           isActive: true,
         },
       ],

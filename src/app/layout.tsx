@@ -94,6 +94,9 @@ export default function RootLayout({
               Breadcrumb: {
                 fontSize: 16,
               },
+              Table: {
+                colorPrimary: colors.primary500,
+              },
             },
           }}
         >

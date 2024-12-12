@@ -36,8 +36,8 @@ const FileUpload = () => {
   };
 
   return (
-    <div>
-      <h5 className="font-semibold">Product Image</h5>
+    <div className="flex-1">
+      <h5 className="font-medium">Product Image</h5>
       <div className="mt-2">
         <Upload
           fileList={fileList}
@@ -65,7 +65,7 @@ const FileUpload = () => {
           />
         )}
       </div>
-      <div className="flex items-start gap-2 mt-2">
+      <div className="flex items-start gap-2 mt-4">
         <BadgeAlert size={16} className="text-gray-600 mt-[1px]" />
         <p className="text-xs text-gray-500">
           You need at least 4 images.

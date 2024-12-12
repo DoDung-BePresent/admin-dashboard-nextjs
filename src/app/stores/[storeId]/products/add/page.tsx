@@ -1,8 +1,16 @@
 "use client";
 
 import FileUpload from "@/components/product/file-upload";
-import { Button, Form, Input, InputNumber, Select, Space, Tag } from "antd";
-import { CircleDollarSign } from "lucide-react";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space,
+  Tag,
+} from "antd";
 
 const { TextArea } = Input;
 
@@ -56,19 +64,19 @@ const colors = [
   },
 ];
 
-const page = () => {
+const AddProductPage = () => {
   return (
-    <div className="container">
+    <div className="container mb-5 md:mb-0">
       <h3 className="font-semibold">Add new product</h3>
       <Form layout="vertical" size="large">
         <div className="grid md:grid-cols-5 my-3 gap-4">
           <div className="md:col-span-3 bg-white rounded-md">
             <h4 className="font-medium">General Information</h4>
-            <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="grid md:grid-cols-4 md:gap-4 mt-2">
               <Form.Item
                 name="name"
                 label="Product Name"
-                className="col-span-2"
+                className="md:col-span-2"
               >
                 <Input placeholder="Enter product name" />
               </Form.Item>
@@ -110,7 +118,7 @@ const page = () => {
                 style={{ resize: "none" }}
               />
             </Form.Item>
-            <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
               <Form.Item name="price" label="Price">
                 <InputNumber<number>
                   min={0}
@@ -209,8 +217,20 @@ const page = () => {
               </div>
             </div>
           </div>
-          <div className="md:col-span-2 mt-9">
+          <div className="md:col-span-2 mt-9 flex flex-col gap-2">
             <FileUpload />
+            <div className="border p-3 rounded-md">
+              <Checkbox>Featured</Checkbox>
+              <p className="text-xs text-gray-500 ml-6">
+                This product will appear on the hoAddProductPage.
+              </p>
+            </div>
+            <div className="border p-3 rounded-md">
+              <Checkbox>Archived</Checkbox>
+              <p className="text-xs text-gray-500 ml-6">
+                This product will not appear anywhere in the store.
+              </p>
+            </div>
           </div>
         </div>
         <div className="text-right">
@@ -224,4 +244,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AddProductPage;
