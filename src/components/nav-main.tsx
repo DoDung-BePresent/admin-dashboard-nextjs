@@ -17,24 +17,76 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+
+import { LayoutDashboard, Shirt, SquareTerminal } from "lucide-react";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useParams, usePathname } from "next/navigation";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-    items?: {
-      title: string;
-      url: string;
-      isActive: boolean;
-    }[];
-  }[];
-}) {
+export function NavMain() {
+  const pathname = usePathname();
+  const { storeId } = useParams<{ storeId: string }>();
+
+  const items = [
+    {
+      title: "Playground",
+      url: "#",
+      icon: SquareTerminal,
+      items: [
+        {
+          title: "History",
+          url: "#",
+          isActive: false,
+        },
+        {
+          title: "Starred",
+          url: "#",
+          isActive: false,
+        },
+        {
+          title: "Settings",
+          url: "#",
+          isActive: false,
+        },
+      ],
+    },
+    {
+      title: "Products",
+      url: "#",
+      icon: Shirt,
+      items: [
+        {
+          title: "List",
+          url: "#",
+          isActive: false,
+        },
+        {
+          title: "Add new product",
+          url: `/stores/${storeId}/products/add`,
+          isActive: pathname === `/stores/${storeId}/products/add`,
+        },
+      ],
+    },
+    {
+      title: "Categories",
+      url: "#",
+      icon: LayoutDashboard,
+      items: [
+        {
+          title: "List",
+          url: "/stores/dfgd/categories",
+          isActive: false,
+        },
+        {
+          title: "Add new category",
+          url: "/stores/dfgd/categories/add",
+          isActive: false,
+        },
+      ],
+    },
+  ];
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Management</SidebarGroupLabel>
@@ -43,7 +95,7 @@ export function NavMain({
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={item.isActive}
+            defaultOpen={item.items.some((subItem) => subItem.isActive)}
             className="group/collapsible"
           >
             <SidebarMenuItem>

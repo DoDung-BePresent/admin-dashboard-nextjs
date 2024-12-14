@@ -1,23 +1,15 @@
 "use client";
 
-import * as React from "react";
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
-  LayoutDashboard,
   Map,
   PieChart,
-  Settings2,
-  Shirt,
-  SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
@@ -26,6 +18,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { UserButton } from "@clerk/nextjs";
 
 // This is sample data.
 const data = {
@@ -49,65 +42,6 @@ const data = {
       name: "Evil Corp.",
       logo: Command,
       plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Starred",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Settings",
-          url: "#",
-          isActive: false,
-        },
-      ],
-    },
-    {
-      title: "Products",
-      url: "#",
-      icon: Shirt,
-      items: [
-        {
-          title: "List",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Add new product",
-          url: "/stores/dfgd/products/add",
-          isActive: true,
-        },
-      ],
-    },
-    {
-      title: "Categories",
-      url: "#",
-      icon: LayoutDashboard,
-      items: [
-        {
-          title: "List",
-          url: "/stores/dfgd/categories",
-          isActive: false,
-        },
-        {
-          title: "Add new category",
-          url: "/stores/dfgd/categories/add",
-          isActive: true,
-        },
-      ],
     },
   ],
   projects: [
@@ -136,10 +70,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <div className="mx-auto mb-4 border w-fit p-1 px-5 rounded-md shadow-sm hover:shadow-md transition-shadow ease-in duration-150">
+          <UserButton afterSignOutUrl="/" showName />
+        </div>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
