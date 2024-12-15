@@ -4,10 +4,8 @@ import axios from "axios";
 import { useState } from "react";
 import { StoreRules } from "@/utils/form-rules";
 import { Button, Form, Input, message } from "antd";
-import { useRouter } from "next/navigation";
 
 const StoreForm = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: { name: string; email: string }) => {
     try {
@@ -15,7 +13,7 @@ const StoreForm = () => {
 
       const response = await axios.post("/api/stores", values);
 
-      router.push(`/stores/${response.data.id}`);
+      window.location.assign(`/stores/${response.data.id}`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

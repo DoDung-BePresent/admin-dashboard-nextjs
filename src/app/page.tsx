@@ -1,7 +1,27 @@
 import StoreForm from "@/components/store/store-form";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
-const SetupPage = () => {
+import prisma from "@/lib/prisma";
+
+const SetupPage = async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const store = await prisma.store.findFirst({
+    where: {
+      userId,
+    },
+  });
+
+  if (store) {
+    redirect(`/stores/${store.id}`);
+  }
+
   return (
     <div className="">
       <div className="grid md:grid-cols-2 h-screen">

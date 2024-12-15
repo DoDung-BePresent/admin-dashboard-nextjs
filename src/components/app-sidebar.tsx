@@ -1,16 +1,11 @@
-"use client";
+import prisma from "@/lib/prisma";
 
-import {
-  AudioWaveform,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-} from "lucide-react";
+import { redirect } from "next/navigation";
+
+import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 import { NavMain } from "@/components/nav-main";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -18,56 +13,27 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { UserButton } from "@clerk/nextjs";
+import StoreSwitcher from "./store-switcher";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-};
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const { userId } = await auth();
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const stores = await prisma.store.findMany({
+    where: {
+      userId,
+    },
+  });
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <StoreSwitcher items={stores} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain />

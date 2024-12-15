@@ -99,6 +99,9 @@ export default function RootLayout({
                 Table: {
                   colorPrimary: colors.primary500,
                 },
+                Modal: {
+                  colorPrimary: colors.primary500,
+                },
               },
             }}
           >
