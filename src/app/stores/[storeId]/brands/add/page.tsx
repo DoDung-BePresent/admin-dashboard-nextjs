@@ -5,7 +5,7 @@ import { Button, Form, Input, message } from "antd";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-const AddCategoryPage = () => {
+const AddBrandPage = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId } = useParams<{ storeId: string }>();
@@ -14,8 +14,8 @@ const AddCategoryPage = () => {
     try {
       setLoading(true);
 
-      await axios.post(`/api/stores/${storeId}/categories`, values);
-      message.success("Create new category successfully!");
+      await axios.post(`/api/stores/${storeId}/brands`, values);
+      message.success("Create new brand successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
@@ -26,7 +26,7 @@ const AddCategoryPage = () => {
   };
   return (
     <div className="container mb-5 md:mb-0">
-      <h3 className="font-semibold">Add new category</h3>
+      <h3 className="font-semibold">Add new brand</h3>
       <div className="my-3">
         <h4 className="font-medium">General Information</h4>
         <div className="mt-2">
@@ -37,8 +37,8 @@ const AddCategoryPage = () => {
             size="large"
             onFinish={onFinish}
           >
-            <Form.Item name="name" label="Category Name">
-              <Input placeholder="Enter category name" />
+            <Form.Item name="name" label="Brand Name">
+              <Input placeholder="Enter brand name" />
             </Form.Item>
             <div className="text-right">
               <Button
@@ -48,7 +48,7 @@ const AddCategoryPage = () => {
                 htmlType="submit"
                 loading={loading}
               >
-                Create Category
+                Create Brand
               </Button>
             </div>
           </Form>
@@ -58,4 +58,4 @@ const AddCategoryPage = () => {
   );
 };
 
-export default AddCategoryPage;
+export default AddBrandPage;

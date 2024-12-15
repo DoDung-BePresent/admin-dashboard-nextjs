@@ -18,6 +18,48 @@ model Store {
   userId String
   name String
   email String
+  storeCategories StoreCategory[]
+  storeBrands StoreBrand[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  storeCategories StoreCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  storeBrands StoreBrand[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StoreCategory {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  store Store @relation(fields: [storeId], references: [id])
+  storeId String @db.ObjectId
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StoreBrand {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  store Store @relation(fields: [storeId], references: [id])
+  storeId String @db.ObjectId
+  brand Brand @relation(fields: [brandId], references: [id])
+  brandId String @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

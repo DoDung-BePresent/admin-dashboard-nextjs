@@ -3,7 +3,6 @@
 import { SetStateAction, useState } from "react";
 import { Button, Form, Input, message, Modal } from "antd";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { StoreRules } from "@/utils/form-rules";
 
 interface ModalStoreFormProps {
@@ -12,7 +11,6 @@ interface ModalStoreFormProps {
 }
 
 const ModalStoreForm: React.FC<ModalStoreFormProps> = ({ isOpen, setOpen }) => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: { name: string; email: string }) => {
     try {
@@ -21,6 +19,7 @@ const ModalStoreForm: React.FC<ModalStoreFormProps> = ({ isOpen, setOpen }) => {
       const response = await axios.post("/api/stores", values);
 
       window.location.assign(`/stores/${response.data.id}`);
+      message.success("Create new store successfully!");
     } catch (error) {
       console.log(error);
       setOpen(false);
@@ -28,7 +27,6 @@ const ModalStoreForm: React.FC<ModalStoreFormProps> = ({ isOpen, setOpen }) => {
     } finally {
       setLoading(false);
       setOpen(false);
-      message.success("Create new store successfully!");
     }
   };
   return (

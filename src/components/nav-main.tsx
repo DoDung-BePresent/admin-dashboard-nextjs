@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight, Tags, type LucideIcon } from "lucide-react";
 
 import {
   Collapsible,
@@ -30,28 +30,6 @@ export function NavMain() {
 
   const items = [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      items: [
-        {
-          title: "History",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Starred",
-          url: "#",
-          isActive: false,
-        },
-        {
-          title: "Settings",
-          url: "#",
-          isActive: false,
-        },
-      ],
-    },
-    {
       title: "Products",
       url: "#",
       icon: Shirt,
@@ -80,8 +58,25 @@ export function NavMain() {
         },
         {
           title: "Add new category",
-          url: "/stores/dfgd/categories/add",
+          url: `/stores/${storeId}/categories/add`,
+          isActive: pathname === `/stores/${storeId}/categories/add`,
+        },
+      ],
+    },
+    {
+      title: "Brands",
+      url: "#",
+      icon: Tags,
+      items: [
+        {
+          title: "List",
+          url: `/stores/${storeId}/brands`,
           isActive: false,
+        },
+        {
+          title: "Add new brand",
+          url: `/stores/${storeId}/brands/add`,
+          isActive: pathname === `/stores/${storeId}/brands/add`,
         },
       ],
     },

@@ -1,5 +1,7 @@
 "use client";
 
+import { getBrands } from "@/actions/get-brands";
+import { getCategories } from "@/actions/get-categories";
 import FileUpload from "@/components/product/file-upload";
 import {
   Button,
@@ -7,10 +9,14 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   Select,
+  SelectProps,
   Space,
   Tag,
 } from "antd";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const { TextArea } = Input;
 
@@ -65,6 +71,82 @@ const colors = [
 ];
 
 const AddProductPage = () => {
+  const [loading, setLoading] = useState(false);
+  const { storeId } = useParams<{ storeId: string }>();
+
+  const [categories, setCategories] = useState<SelectProps["options"]>([]);
+
+  const [brands, setBrands] = useState<SelectProps["options"]>([]);
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const fetchedCategories = await getCategories(storeId);
+
+  //       const formattedData = fetchedCategories.map((category) => ({
+  //         label: category.name,
+  //         value: category.id,
+  //       }));
+
+  //       setCategories(formattedData);
+  //     } catch (error) {
+  //       console.log(error);
+  //       message.error("Something went wrong!");
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, [storeId]);
+
+  // useEffect(() => {
+  //   const fetchBrands = async () => {
+  //     try {
+  //       const fetchedBrands = await getBrands(storeId);
+
+  //       const formattedData = fetchedBrands.map((brand) => ({
+  //         label: brand.name,
+  //         value: brand.id,
+  //       }));
+
+  //       setBrands(formattedData);
+  //     } catch (error) {
+  //       console.log(error);
+  //       message.error("Something went wrong!");
+  //     }
+  //   };
+
+  //   fetchBrands();
+  // }, [storeId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [fetchedCategories, fetchedBrands] = await Promise.all([
+          getCategories(storeId),
+          getBrands(storeId),
+        ]);
+
+        const formattedCategories = fetchedCategories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+
+        const formattedBrands = fetchedBrands.map((brand) => ({
+          label: brand.name,
+          value: brand.id,
+        }));
+
+        setCategories(formattedCategories);
+        setBrands(formattedBrands);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        message.error("Something went wrong!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [storeId]);
   return (
     <div className="container mb-5 md:mb-0">
       <h3 className="font-semibold">Add new product</h3>
@@ -82,32 +164,16 @@ const AddProductPage = () => {
               </Form.Item>
               <Form.Item name="brand" label="Brand Name">
                 <Select
+                  loading={loading}
                   placeholder="Select brand name"
-                  options={[
-                    {
-                      value: "Nike",
-                      label: "Nike",
-                    },
-                    {
-                      value: "Yody",
-                      label: "Yody",
-                    },
-                  ]}
+                  options={brands}
                 />
               </Form.Item>
               <Form.Item name="category" label="Category">
                 <Select
+                  loading={loading}
                   placeholder="Select category"
-                  options={[
-                    {
-                      value: "Shoes",
-                      label: "Shoes",
-                    },
-                    {
-                      value: "T-shirt",
-                      label: "T-shirt",
-                    },
-                  ]}
+                  options={categories}
                 />
               </Form.Item>
             </div>

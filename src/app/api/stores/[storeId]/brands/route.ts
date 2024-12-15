@@ -33,22 +33,22 @@ export const POST = async (
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const newCategory = await prisma.category.create({
+    const newBrand = await prisma.brand.create({
       data: {
         name,
       },
     });
 
-    await prisma.storeCategory.create({
+    await prisma.storeBrand.create({
       data: {
         storeId,
-        categoryId: newCategory.id,
+        brandId: newBrand.id,
       },
     });
 
-    return NextResponse.json(newCategory);
+    return NextResponse.json(newBrand);
   } catch (error) {
-    console.log("[CATEGORY_POST]:", error);
+    console.log("[BRAND_POST]:", error);
     return new NextResponse("Internal Server Error:", { status: 500 });
   }
 };
