@@ -36,13 +36,11 @@ export const POST = async (
     const newBrand = await prisma.brand.create({
       data: {
         name,
-      },
-    });
-
-    await prisma.storeBrand.create({
-      data: {
-        storeId,
-        brandId: newBrand.id,
+        store: {
+          connect: {
+            id: storeId,
+          },
+        },
       },
     });
 

@@ -128,3 +128,7 @@ body {
 .ant-form-item-label {
   font-weight: 500;
 }
+
+.ant-color-picker-trigger.ant-color-picker-trigger-active {
+  box-shadow: 0 0 0 2px rgb(162, 159, 169) !important;
+}

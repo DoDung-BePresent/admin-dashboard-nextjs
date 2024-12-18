@@ -102,6 +102,18 @@ export default function RootLayout({
                 Modal: {
                   colorPrimary: colors.primary500,
                 },
+                ColorPicker: {
+                  colorBorder: colors.primary500,
+                  colorPrimary: colors.primary500,
+                  colorPrimaryHover: colors.primary500,
+                },
+                Pagination: {
+                  colorPrimary: colors.primary500,
+                  colorPrimaryHover: colors.primary300,
+                },
+                Spin: {
+                  colorPrimary: colors.primary500,
+                },
               },
             }}
           >

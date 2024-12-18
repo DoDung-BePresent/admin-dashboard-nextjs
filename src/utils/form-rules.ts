@@ -5,6 +5,14 @@ type StoreRulesType = {
   email: Rule[];
 };
 
+type CategoryRulesType = {
+  name: Rule[];
+};
+
+type BrandRulesType = {
+  name: Rule[];
+};
+
 export const StoreRules: StoreRulesType = {
   name: [
     {
@@ -28,6 +36,40 @@ export const StoreRules: StoreRulesType = {
     {
       type: "email",
       message: "Invalid email address!",
+    },
+  ],
+};
+
+export const CategoryRules: CategoryRulesType = {
+  name: [
+    {
+      required: true,
+      message: "Category name is required!",
+    },
+    {
+      min: 2,
+      message: "Category name must be at least 6 characters long!",
+    },
+    {
+      max: 50,
+      message: "Category name cannot exceed 50 characters long!",
+    },
+  ],
+};
+
+export const BrandRules: BrandRulesType = {
+  name: [
+    {
+      required: true,
+      message: "Category name is required!",
+    },
+    {
+      min: 2,
+      message: "Category name must be at least 6 characters long!",
+    },
+    {
+      max: 50,
+      message: "Category name cannot exceed 50 characters long!",
     },
   ],
 };

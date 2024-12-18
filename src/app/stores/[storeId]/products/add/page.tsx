@@ -74,47 +74,8 @@ const AddProductPage = () => {
   const [loading, setLoading] = useState(false);
   const { storeId } = useParams<{ storeId: string }>();
 
-  const [categories, setCategories] = useState<SelectProps["options"]>([]);
-
   const [brands, setBrands] = useState<SelectProps["options"]>([]);
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const fetchedCategories = await getCategories(storeId);
-
-  //       const formattedData = fetchedCategories.map((category) => ({
-  //         label: category.name,
-  //         value: category.id,
-  //       }));
-
-  //       setCategories(formattedData);
-  //     } catch (error) {
-  //       console.log(error);
-  //       message.error("Something went wrong!");
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, [storeId]);
-
-  // useEffect(() => {
-  //   const fetchBrands = async () => {
-  //     try {
-  //       const fetchedBrands = await getBrands(storeId);
-
-  //       const formattedData = fetchedBrands.map((brand) => ({
-  //         label: brand.name,
-  //         value: brand.id,
-  //       }));
-
-  //       setBrands(formattedData);
-  //     } catch (error) {
-  //       console.log(error);
-  //       message.error("Something went wrong!");
-  //     }
-  //   };
-
-  //   fetchBrands();
-  // }, [storeId]);
+  const [categories, setCategories] = useState<SelectProps["options"]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

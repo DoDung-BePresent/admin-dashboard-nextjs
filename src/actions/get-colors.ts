@@ -2,8 +2,8 @@
 
 import prisma from "@/lib/prisma";
 
-export const getBrands = async (storeId: string) => {
-  const brands = await prisma.brand.findMany({
+export const getColors = async (storeId: string) => {
+  const colors = await prisma.color.findMany({
     where: {
       storeId,
       NOT: {
@@ -12,5 +12,5 @@ export const getBrands = async (storeId: string) => {
     },
   });
 
-  return brands;
+  return colors;
 };

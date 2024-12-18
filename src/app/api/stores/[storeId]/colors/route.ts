@@ -12,7 +12,7 @@ export const POST = async (
 
     const body = await req.json();
 
-    const { name } = body;
+    const { name, code } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -33,9 +33,10 @@ export const POST = async (
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const newCategory = await prisma.category.create({
+    const newColor = await prisma.color.create({
       data: {
         name,
+        code,
         store: {
           connect: {
             id: storeId,
@@ -44,9 +45,9 @@ export const POST = async (
       },
     });
 
-    return NextResponse.json(newCategory);
+    return NextResponse.json(newColor);
   } catch (error) {
-    console.log("[CATEGORY_POST]:", error);
+    console.log("[COLOR_POST]:", error);
     return new NextResponse("Internal Server Error:", { status: 500 });
   }
 };

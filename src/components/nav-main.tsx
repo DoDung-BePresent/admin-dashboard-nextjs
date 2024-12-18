@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Tags, type LucideIcon } from "lucide-react";
+import { ChevronRight, Palette, Tags } from "lucide-react";
 
 import {
   Collapsible,
@@ -18,7 +18,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 
-import { LayoutDashboard, Shirt, SquareTerminal } from "lucide-react";
+import { LayoutDashboard, Shirt } from "lucide-react";
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -36,8 +36,8 @@ export function NavMain() {
       items: [
         {
           title: "List",
-          url: "#",
-          isActive: false,
+          url: `/stores/${storeId}/products`,
+          isActive: pathname === `/stores/${storeId}/products`,
         },
         {
           title: "Add new product",
@@ -53,8 +53,8 @@ export function NavMain() {
       items: [
         {
           title: "List",
-          url: "/stores/dfgd/categories",
-          isActive: false,
+          url: `/stores/${storeId}/categories`,
+          isActive: pathname === `/stores/${storeId}/categories`,
         },
         {
           title: "Add new category",
@@ -71,12 +71,29 @@ export function NavMain() {
         {
           title: "List",
           url: `/stores/${storeId}/brands`,
-          isActive: false,
+          isActive: pathname === `/stores/${storeId}/brands`,
         },
         {
           title: "Add new brand",
           url: `/stores/${storeId}/brands/add`,
           isActive: pathname === `/stores/${storeId}/brands/add`,
+        },
+      ],
+    },
+    {
+      title: "Colors",
+      url: "#",
+      icon: Palette,
+      items: [
+        {
+          title: "List",
+          url: `/stores/${storeId}/colors`,
+          isActive: pathname === `/stores/${storeId}/colors`,
+        },
+        {
+          title: "Add new color",
+          url: `/stores/${storeId}/colors/add`,
+          isActive: pathname === `/stores/${storeId}/colors/add`,
         },
       ],
     },
