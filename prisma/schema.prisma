@@ -22,6 +22,7 @@ model Store {
   colors Color[] 
   categories Category[]
   brands Brand[]
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,6 +34,7 @@ model Category {
   store Store @relation(fields: [storeId], references: [id])
   storeId String @db.ObjectId
   isDeleted Boolean @default(false)
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,6 +46,7 @@ model Brand {
   store Store @relation(fields: [storeId], references: [id])
   storeId String @db.ObjectId
   isDeleted Boolean @default(false)
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,7 +59,53 @@ model Color {
   store Store @relation(fields: [storeId], references: [id])
   storeId String @db.ObjectId
   isDeleted Boolean @default(false)
+  productIDs String[] @db.ObjectId
+  products Product[] @relation(fields: [productIDs], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  description String
+  store Store @relation(fields: [storeId], references: [id])
+  storeId String @db.ObjectId
+  brand Brand @relation(fields: [brandId], references: [id])
+  brandId String @db.ObjectId
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId String @db.ObjectId
+  price Float
+  discount Float @default(0)
+  quantity Int
+  gender String
+  sizes SizeEnum[]
+  images Image[]
+  colorIDs String[] @db.ObjectId
+  colors Color[] @relation(fields: [colorIDs], references: [id])
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  url String
+  alt String?
+  product Product @relation(fields: [productId], references: [id])
+  productId String @db.ObjectId
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SizeEnum {
+  S
+  M
+  L
+  XL
+  XXL
 }

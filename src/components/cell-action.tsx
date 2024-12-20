@@ -39,7 +39,7 @@ const CellAction = ({ id }: { id: string }) => {
         color="danger"
         variant="solid"
         onClick={handleDelete}
-        loading={loading}
+        disabled={loading}
       >
         Delete
       </Button>

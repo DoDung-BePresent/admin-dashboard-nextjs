@@ -23,6 +23,7 @@
     "antd": "^5.22.4",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "lucide-react": "^0.468.0",

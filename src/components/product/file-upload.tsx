@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 import { Image, Upload } from "antd";
-import { BadgeAlert, Image as ImageIcon, Plus } from "lucide-react";
-import { UploadChangeParam, UploadFile } from "antd/es/upload";
+import { BadgeAlert, Plus } from "lucide-react";
+import { UploadFile } from "antd/es/upload";
 import type { GetProp, UploadProps } from "antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+interface FileUploadProps {
+  images: { id: string; url: string; alt: string | undefined }[];
+  setImages: React.Dispatch<
+    React.SetStateAction<{ id: string; url: string; alt: string | undefined }[]>
+  >;
+}
 
 const getBase64 = (file: any): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -16,10 +23,9 @@ const getBase64 = (file: any): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const FileUpload = () => {
+const FileUpload: React.FC<FileUploadProps> = ({ setImages, images }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handlePreview = async (file: UploadFile) => {
@@ -31,7 +37,24 @@ const FileUpload = () => {
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps["onChange"] = async ({
+    file,
+    fileList: newFileList,
+  }) => {
+    if (file.status === "done") {
+      const imageBase64 = await getBase64(file.originFileObj as FileType);
+      setImages([
+        ...images,
+        {
+          id: file.uid,
+          url: imageBase64,
+          alt: file.name,
+        },
+      ]);
+    } else if (file.status === "removed") {
+      const filteredImages = images.filter((image) => image.id !== file.uid);
+      setImages(filteredImages);
+    }
     setFileList(newFileList);
   };
 

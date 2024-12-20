@@ -1,8 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
+
+import { cn } from "@/lib/utils";
+import { sizes } from "@/constants/sizes";
+import { getColors } from "@/actions/get-colors";
 import { getBrands } from "@/actions/get-brands";
 import { getCategories } from "@/actions/get-categories";
 import FileUpload from "@/components/product/file-upload";
+
 import {
   Button,
   Checkbox,
@@ -15,77 +23,40 @@ import {
   Space,
   Tag,
 } from "antd";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const { TextArea } = Input;
 
-const sizes = [
-  {
-    label: "S",
-    value: "S",
-  },
-  {
-    label: "M",
-    value: "M",
-  },
-  {
-    label: "L",
-    value: "L",
-  },
-  {
-    label: "XL",
-    value: "XL",
-  },
-  {
-    label: "XXL",
-    value: "XXL",
-  },
-];
-
-const colors = [
-  {
-    label: "Red",
-    value: "#E15353",
-  },
-  {
-    label: "Blue",
-    value: "#5553E1",
-  },
-  {
-    label: "Orange",
-    value: "#E1A053",
-  },
-  {
-    label: "Black",
-    value: "#000000",
-  },
-  {
-    label: "Green",
-    value: "#A3D139",
-  },
-  {
-    label: "Yellow",
-    value: "#E1D353",
-  },
-];
-
 const AddProductPage = () => {
-  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const router = useRouter();
   const { storeId } = useParams<{ storeId: string }>();
-
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [brands, setBrands] = useState<SelectProps["options"]>([]);
+  const [colors, setColors] = useState<SelectProps["options"]>([]);
   const [categories, setCategories] = useState<SelectProps["options"]>([]);
+  const [images, setImages] = useState<
+    { id: string; url: string; alt: string | undefined }[]
+  >([]);
+
+  const toggleSize = (size: string) => {
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const [fetchedCategories, fetchedBrands] = await Promise.all([
-          getCategories(storeId),
-          getBrands(storeId),
-        ]);
+        const [fetchedCategories, fetchedBrands, fetchedColors] =
+          await Promise.all([
+            getCategories(storeId),
+            getBrands(storeId),
+            getColors(storeId),
+          ]);
 
         const formattedCategories = fetchedCategories.map((category) => ({
           label: category.name,
@@ -97,8 +68,15 @@ const AddProductPage = () => {
           value: brand.id,
         }));
 
+        const formattedColors = fetchedColors.map((color) => ({
+          label: color.name,
+          value: color.code,
+          id: color.id,
+        }));
+
         setCategories(formattedCategories);
         setBrands(formattedBrands);
+        setColors(formattedColors);
       } catch (error) {
         console.error("Error fetching data:", error);
         message.error("Something went wrong!");
@@ -108,10 +86,59 @@ const AddProductPage = () => {
     };
     fetchData();
   }, [storeId]);
+
+  const onFinish = async (values: {
+    name: string;
+    brand: string;
+    category: string;
+    description: string;
+    price: number;
+    discount: number;
+    quantity: number;
+    gender: string;
+    images: { id: string; url: string; alt: string | undefined }[];
+    sizes: string[];
+    colors: string[];
+  }) => {
+    try {
+      setLoadingForm(true);
+      const selectedColorIds = values.colors.map((value: string) => {
+        const color = colors?.find((color) => color.value === value);
+        return color?.id;
+      });
+
+      values.colors = selectedColorIds;
+      values.sizes = selectedSizes;
+
+      const res = await axios.post("/api/upload", {
+        files: images,
+        folderName: "products",
+      });
+
+      values.images = res.data.data;
+
+      await axios.post(`/api/stores/${storeId}/products`, values);
+
+      message.success("Create new product successfully!");
+      router.push(`/stores/${storeId}/products`);
+    } catch (error) {
+      console.log(error);
+      message.error("Something went wrong!");
+    } finally {
+      setLoadingForm(false);
+    }
+  };
+
   return (
     <div className="container mb-5 md:mb-0">
       <h3 className="font-semibold">Add new product</h3>
-      <Form layout="vertical" size="large">
+      <Form
+        form={form}
+        layout="vertical"
+        size="large"
+        onFinish={onFinish}
+        disabled={loadingForm}
+      >
         <div className="grid md:grid-cols-5 my-3 gap-4">
           <div className="md:col-span-3 bg-white rounded-md">
             <h4 className="font-medium">General Information</h4>
@@ -204,7 +231,19 @@ const AddProductPage = () => {
                   {sizes.map((size, index) => (
                     <div
                       key={index}
-                      className="flex h-10 w-10 items-center justify-center rounded-md border border-black transition-colors duration-150 ease-in hover:bg-black hover:text-white"
+                      className={cn(
+                        "flex h-10 w-10 items-center justify-center rounded-md border border-black transition-colors duration-150 ease-in hover:bg-black hover:text-white hover:cursor-pointer",
+                        {
+                          "bg-black text-white": selectedSizes.includes(
+                            size.value
+                          ),
+                        },
+                        {
+                          "cursor-not-allowed bg-gray-500 hover:cursor-not-allowed text-white hover:bg-gray-500":
+                            loadingForm === true,
+                        }
+                      )}
+                      onClick={() => toggleSize(size.value)}
                     >
                       {size.label}
                     </div>
@@ -212,9 +251,9 @@ const AddProductPage = () => {
                 </div>
               </div>
               <div className="">
-                <h5 className="font-semibold">Colors</h5>
-                <div className="mt-2">
+                <Form.Item name="colors" label="Colors">
                   <Select
+                    loading={loading}
                     mode="multiple"
                     className="w-full"
                     placeholder="Select color"
@@ -234,26 +273,26 @@ const AddProductPage = () => {
                       <Space>
                         <div
                           className="h-4 w-4 rounded-sm"
-                          style={{ backgroundColor: option.data.label }}
+                          style={{ backgroundColor: `${option.data.value}` }}
                         />
                         <span>{option.data.label}</span>
                       </Space>
                     )}
                   />
-                </div>
+                </Form.Item>
               </div>
             </div>
           </div>
           <div className="md:col-span-2 mt-9 flex flex-col gap-2">
-            <FileUpload />
+            <FileUpload images={images} setImages={setImages} />
             <div className="border p-3 rounded-md">
-              <Checkbox>Featured</Checkbox>
+              <Checkbox disabled={true}>Featured</Checkbox>
               <p className="text-xs text-gray-500 ml-6">
                 This product will appear on the hoAddProductPage.
               </p>
             </div>
             <div className="border p-3 rounded-md">
-              <Checkbox>Archived</Checkbox>
+              <Checkbox disabled={true}>Archived</Checkbox>
               <p className="text-xs text-gray-500 ml-6">
                 This product will not appear anywhere in the store.
               </p>
@@ -262,7 +301,12 @@ const AddProductPage = () => {
         </div>
         <div className="text-right">
           <Button variant="solid">Save as Draft</Button>
-          <Button variant="solid" color="default" className="ml-2">
+          <Button
+            variant="solid"
+            color="default"
+            className="ml-2"
+            htmlType="submit"
+          >
             Create Product
           </Button>
         </div>
