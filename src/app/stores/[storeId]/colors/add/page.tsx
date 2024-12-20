@@ -3,10 +3,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, ColorPicker, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AggregationColor } from "antd/es/color-picker/color";
 
 const AddColorPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId } = useParams<{ storeId: string }>();
@@ -14,19 +15,17 @@ const AddColorPage = () => {
   const onFinish = async (values: { name: string; code: AggregationColor }) => {
     try {
       setLoading(true);
-
       await axios.post(`/api/stores/${storeId}/colors`, {
         name: values.name,
         code: values.code.toHexString(),
       });
-
       message.success("Create new color successfully!");
+      router.push(`/stores/${storeId}/colors`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
     } finally {
       setLoading(false);
-      form.resetFields();
     }
   };
   return (

@@ -1,11 +1,12 @@
 "use client";
 
 import axios from "axios";
-import { Button, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
 import { useState } from "react";
+import { Button, Form, Input, message } from "antd";
+import { useParams, useRouter } from "next/navigation";
 
 const AddCategoryPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId } = useParams<{ storeId: string }>();
@@ -13,15 +14,14 @@ const AddCategoryPage = () => {
   const onFinish = async (values: { name: string }) => {
     try {
       setLoading(true);
-
       await axios.post(`/api/stores/${storeId}/categories`, values);
       message.success("Create new category successfully!");
+      router.push(`/stores/${storeId}/categories`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
     } finally {
       setLoading(false);
-      form.resetFields();
     }
   };
   return (

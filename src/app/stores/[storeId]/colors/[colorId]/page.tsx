@@ -3,10 +3,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, ColorPicker, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AggregationColor } from "antd/es/color-picker/color";
 
 const UpdateColorPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId, colorId } = useParams<{
@@ -17,17 +18,12 @@ const UpdateColorPage = () => {
   const onFinish = async (values: { name: string; code: AggregationColor }) => {
     try {
       setLoading(true);
-
-      const res = await axios.patch(
-        `/api/stores/${storeId}/colors/${colorId}`,
-        {
-          name: values.name,
-          code: values.code.toHexString(),
-        }
-      );
-
-      form.setFieldsValue(res.data);
+      await axios.patch(`/api/stores/${storeId}/colors/${colorId}`, {
+        name: values.name,
+        code: values.code.toHexString(),
+      });
       message.success("Update color successfully!");
+      router.push(`/stores/${storeId}/colors`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
@@ -40,9 +36,7 @@ const UpdateColorPage = () => {
     const getColor = async () => {
       try {
         setLoading(true);
-
         const res = await axios.get(`/api/stores/${storeId}/colors/${colorId}`);
-
         form.setFieldsValue(res.data);
       } catch (error) {
         console.log("Error fetching data:", error);

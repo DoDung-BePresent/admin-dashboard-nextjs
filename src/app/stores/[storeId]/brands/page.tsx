@@ -1,41 +1,26 @@
-"use client";
-
-import { message, SelectProps } from "antd";
+import prisma from "@/lib/prisma";
 import CustomTable from "@/components/custom-table";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getBrands } from "@/actions/get-brands";
 import { brandColumn } from "@/components/brand/column";
 
-const CategoriesPage = () => {
-  const { storeId } = useParams<{ storeId: string }>();
+const BrandsPage = async ({
+  params,
+}: {
+  params: Promise<{ storeId: string }>;
+}) => {
+  const { storeId } = await params;
 
-  const [loading, setLoading] = useState(false);
-  const [brands, setBrands] = useState<SelectProps["options"]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        const fetchedBrands = await getBrands(storeId);
-
-        setBrands(fetchedBrands);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        message.error("Something went wrong!");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [storeId]);
+  const brands = await prisma.brand.findMany({
+    where: {
+      storeId,
+      NOT: {
+        isDeleted: true,
+      },
+    },
+  });
 
   return (
     <div className="container mb-5 md:mb-0">
       <CustomTable
-        loading={loading}
         title="List brand"
         columns={brandColumn}
         dataSource={brands}
@@ -44,4 +29,4 @@ const CategoriesPage = () => {
   );
 };
 
-export default CategoriesPage;
+export default BrandsPage;

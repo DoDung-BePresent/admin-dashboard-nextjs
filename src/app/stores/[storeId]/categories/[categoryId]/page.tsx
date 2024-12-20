@@ -2,11 +2,12 @@
 
 import axios from "axios";
 import { Button, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CategoryRules } from "@/utils/form-rules";
 
 const UpdateCategoryPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId, categoryId } = useParams<{
@@ -17,14 +18,12 @@ const UpdateCategoryPage = () => {
   const onFinish = async (values: { name: string }) => {
     try {
       setLoading(true);
-
-      const res = await axios.patch(
+      await axios.patch(
         `/api/stores/${storeId}/categories/${categoryId}`,
         values
       );
-
-      form.setFieldsValue(res.data);
       message.success("Update category successfully!");
+      router.push(`/stores/${storeId}/categories`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

@@ -1,3 +1,5 @@
+"use client";
+
 import { ColorPicker, TableProps } from "antd";
 import CellAction from "@/components/cell-action";
 

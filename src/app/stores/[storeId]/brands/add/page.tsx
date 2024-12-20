@@ -2,10 +2,11 @@
 
 import axios from "axios";
 import { Button, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const AddBrandPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId } = useParams<{ storeId: string }>();
@@ -13,15 +14,14 @@ const AddBrandPage = () => {
   const onFinish = async (values: { name: string }) => {
     try {
       setLoading(true);
-
       await axios.post(`/api/stores/${storeId}/brands`, values);
       message.success("Create new brand successfully!");
+      router.push(`/stores/${storeId}/brands`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
     } finally {
       setLoading(false);
-      form.resetFields();
     }
   };
   return (

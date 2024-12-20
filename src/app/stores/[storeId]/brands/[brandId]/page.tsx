@@ -2,11 +2,12 @@
 
 import axios from "axios";
 import { Button, Form, Input, message } from "antd";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BrandRules } from "@/utils/form-rules";
 
 const UpdateBrandPage = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { storeId, brandId } = useParams<{
@@ -17,14 +18,12 @@ const UpdateBrandPage = () => {
   const onFinish = async (values: { name: string }) => {
     try {
       setLoading(true);
-
-      const res = await axios.patch(
+      await axios.patch(
         `/api/stores/${storeId}/brands/${brandId}`,
         values
       );
-
-      form.setFieldsValue(res.data);
       message.success("Update brand successfully!");
+      router.push(`/stores/${storeId}/brands`);
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

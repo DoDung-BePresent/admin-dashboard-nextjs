@@ -1,3 +1,5 @@
+"use client";
+
 import { TableProps } from "antd";
 import CellAction from "@/components/cell-action";
 

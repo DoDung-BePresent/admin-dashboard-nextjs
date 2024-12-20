@@ -1,41 +1,26 @@
 "use client";
-
-import { message, SelectProps } from "antd";
+import prisma from "@/lib/prisma";
 import CustomTable from "@/components/custom-table";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getCategories } from "@/actions/get-categories";
 import { categoryColumn } from "@/components/category/column";
 
-const CategoriesPage = () => {
-  const { storeId } = useParams<{ storeId: string }>();
+const CategoriesPage = async ({
+  params,
+}: {
+  params: Promise<{ storeId: string }>;
+}) => {
+  const { storeId } = await params;
 
-  const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<SelectProps["options"]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        const fetchedCategories = await getCategories(storeId);
-
-        setCategories(fetchedCategories);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        message.error("Something went wrong!");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [storeId]);
-
+  const categories = await prisma.category.findMany({
+    where: {
+      storeId,
+      NOT: {
+        isDeleted: true,
+      },
+    },
+  });
   return (
     <div className="container mb-5 md:mb-0">
       <CustomTable
-        loading={loading}
         title="List category"
         columns={categoryColumn}
         dataSource={categories}

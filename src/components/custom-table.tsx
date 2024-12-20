@@ -6,17 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 interface CustomTable {
   title: string;
-  loading: boolean;
   columns: TableProps["columns"];
   dataSource: TableProps["dataSource"];
 }
 
-const CustomTable: React.FC<CustomTable> = ({
-  title,
-  columns,
-  dataSource,
-  loading,
-}) => {
+const CustomTable: React.FC<CustomTable> = ({ title, columns, dataSource }) => {
   const router = useRouter();
   const pathname = usePathname();
   const addLink = pathname + "/add";
@@ -33,7 +27,7 @@ const CustomTable: React.FC<CustomTable> = ({
             <Plus size={16} /> Add new
           </Button>
         </div>
-        <Table loading={loading} columns={columns} dataSource={dataSource} />
+        <Table columns={columns} dataSource={dataSource} />
       </div>
     </>
   );

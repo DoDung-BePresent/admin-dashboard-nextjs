@@ -1,3 +1,5 @@
+"use client";
+
 import axios from "axios";
 import { Button, message } from "antd";
 import { useState } from "react";
@@ -6,16 +8,13 @@ import { usePathname, useRouter } from "next/navigation";
 const CellAction = ({ id }: { id: string }) => {
   const router = useRouter();
   const pathname = usePathname();
-
   const [loading, setLoading] = useState(false);
 
-  // FIXME: Something went wrong with router.refresh(). It doesn't work!
   const handleDelete = async () => {
     try {
       setLoading(true);
       await axios.delete(`/api` + pathname + `/${id}`);
-      // router.refresh();
-      location.reload();
+      router.refresh();
       message.success("Delete successfully!");
     } catch (error) {
       console.log(error);
