@@ -27,7 +27,7 @@ const CustomTable: React.FC<CustomTable> = ({ title, columns, dataSource }) => {
             <Plus size={16} /> Add new
           </Button>
         </div>
-        <Table columns={columns} dataSource={dataSource} />
+        <Table columns={columns} dataSource={dataSource} rowKey="id" />
       </div>
     </>
   );

@@ -6,7 +6,7 @@ import { Button, Form, Input, message } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { CategoryRules } from "@/utils/form-rules";
 
-const UpdateCategoryPage = () => {
+const CategoryPage = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -89,4 +89,4 @@ const UpdateCategoryPage = () => {
   );
 };
 
-export default UpdateCategoryPage;
+export default CategoryPage;

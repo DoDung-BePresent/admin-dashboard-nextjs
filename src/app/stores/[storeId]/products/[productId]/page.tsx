@@ -2,14 +2,12 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { sizes } from "@/constants/sizes";
-import { getColors } from "@/actions/get-colors";
+import { useParams, useRouter } from "next/navigation";
 import { getBrands } from "@/actions/get-brands";
+import { getColors } from "@/actions/get-colors";
 import { getCategories } from "@/actions/get-categories";
 import FileUpload from "@/components/product/file-upload";
-
 import {
   Button,
   Checkbox,
@@ -22,28 +20,65 @@ import {
   Space,
   Tag,
 } from "antd";
+import { cn } from "@/lib/utils";
+import { Color } from "@prisma/client";
 
 const { TextArea } = Input;
 
-const AddProductPage = () => {
+const ProductPage = () => {
   const router = useRouter();
   const [form] = Form.useForm();
-  const { storeId } = useParams<{ storeId: string }>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+  const { storeId, productId } = useParams<{
+    storeId: string;
+    productId: string;
+  }>();
+
   const [brands, setBrands] = useState<SelectProps["options"]>([]);
   const [colors, setColors] = useState<SelectProps["options"]>([]);
   const [categories, setCategories] = useState<SelectProps["options"]>([]);
+
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
   const [images, setImages] = useState<
     { id: string; url: string; alt: string | undefined }[]
   >([]);
 
-  const toggleSize = (size: string) => {
-    setSelectedSizes((prev) =>
-      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-    );
-  };
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.get(
+          `/api/stores/${storeId}/products/${productId}`
+        );
+
+        const colors = res.data.colors.map((color: Color) => ({
+          label: color.name,
+          value: color.code,
+          id: color.id,
+        }));
+
+        form.setFieldsValue({
+          ...res.data,
+          brand: res.data.brand.name,
+          category: res.data.category.name,
+          colors,
+        });
+
+        setSelectedSizes(res.data.sizes);
+        setImages(res.data.images);
+      } catch (error) {
+        console.log(error);
+        message.error("Something went wrong!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getProduct();
+  }, [storeId, productId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,6 +161,12 @@ const AddProductPage = () => {
     } finally {
       setLoadingForm(false);
     }
+  };
+
+  const toggleSize = (size: string) => {
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
   };
 
   return (
@@ -314,4 +355,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default ProductPage;

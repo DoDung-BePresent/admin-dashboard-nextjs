@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BrandRules } from "@/utils/form-rules";
 
-const UpdateBrandPage = () => {
+const BrandPage = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -83,4 +83,4 @@ const UpdateBrandPage = () => {
   );
 };
 
-export default UpdateBrandPage;
+export default BrandPage;

@@ -6,7 +6,7 @@ import { Button, ColorPicker, Form, Input, message } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { AggregationColor } from "antd/es/color-picker/color";
 
-const UpdateColorPage = () => {
+const ColorPage = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -92,4 +92,4 @@ const UpdateColorPage = () => {
   );
 };
 
-export default UpdateColorPage;
+export default ColorPage;
