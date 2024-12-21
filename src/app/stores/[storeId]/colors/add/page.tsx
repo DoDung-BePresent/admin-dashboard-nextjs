@@ -19,8 +19,9 @@ const AddColorPage = () => {
         name: values.name,
         code: values.code.toHexString(),
       });
-      message.success("Create new color successfully!");
       router.push(`/stores/${storeId}/colors`);
+      router.refresh();
+      message.success("Create new color successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

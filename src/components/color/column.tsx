@@ -1,6 +1,6 @@
 "use client";
 
-import { ColorPicker, TableProps } from "antd";
+import { TableProps } from "antd";
 import CellAction from "@/components/cell-action";
 
 export const colorColumn: TableProps["columns"] = [
@@ -29,8 +29,11 @@ export const colorColumn: TableProps["columns"] = [
     title: "Color",
     key: "color",
     dataIndex: "code",
-    render: (code: string) => (
-      <ColorPicker defaultValue={code} showText disabled />
+    render: (_, record) => (
+      <div
+        className="w-7 h-7 rounded-sm border"
+        style={{ backgroundColor: `${record.code}` }}
+      />
     ),
   },
   {

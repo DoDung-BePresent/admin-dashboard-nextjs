@@ -15,8 +15,9 @@ const AddCategoryPage = () => {
     try {
       setLoading(true);
       await axios.post(`/api/stores/${storeId}/categories`, values);
-      message.success("Create new category successfully!");
       router.push(`/stores/${storeId}/categories`);
+      router.refresh();
+      message.success("Create new category successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

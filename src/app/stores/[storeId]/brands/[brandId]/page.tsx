@@ -22,8 +22,9 @@ const UpdateBrandPage = () => {
         `/api/stores/${storeId}/brands/${brandId}`,
         values
       );
-      message.success("Update brand successfully!");
       router.push(`/stores/${storeId}/brands`);
+      router.refresh();
+      message.success("Update brand successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

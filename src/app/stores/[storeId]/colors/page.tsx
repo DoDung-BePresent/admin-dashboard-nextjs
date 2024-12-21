@@ -1,5 +1,3 @@
-"use client";
-
 import prisma from "@/lib/prisma";
 import CustomTable from "@/components/custom-table";
 import { colorColumn } from "@/components/color/column";
@@ -17,6 +15,9 @@ const ColorsPage = async ({
       NOT: {
         isDeleted: true,
       },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 

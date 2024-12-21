@@ -1,4 +1,3 @@
-"use client";
 import prisma from "@/lib/prisma";
 import CustomTable from "@/components/custom-table";
 import { categoryColumn } from "@/components/category/column";
@@ -16,6 +15,9 @@ const CategoriesPage = async ({
       NOT: {
         isDeleted: true,
       },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
   return (

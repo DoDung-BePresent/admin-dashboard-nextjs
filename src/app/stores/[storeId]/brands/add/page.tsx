@@ -15,8 +15,9 @@ const AddBrandPage = () => {
     try {
       setLoading(true);
       await axios.post(`/api/stores/${storeId}/brands`, values);
-      message.success("Create new brand successfully!");
       router.push(`/stores/${storeId}/brands`);
+      router.refresh();
+      message.success("Create new brand successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

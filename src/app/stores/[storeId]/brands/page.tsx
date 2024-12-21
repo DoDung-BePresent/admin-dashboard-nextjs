@@ -16,6 +16,9 @@ const BrandsPage = async ({
         isDeleted: true,
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return (

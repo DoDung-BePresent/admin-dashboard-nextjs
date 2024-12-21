@@ -1,9 +1,9 @@
 "use client";
 
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { CategoryRules } from "@/utils/form-rules";
 
 const UpdateCategoryPage = () => {
@@ -22,8 +22,9 @@ const UpdateCategoryPage = () => {
         `/api/stores/${storeId}/categories/${categoryId}`,
         values
       );
-      message.success("Update category successfully!");
       router.push(`/stores/${storeId}/categories`);
+      router.refresh();
+      message.success("Update category successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");

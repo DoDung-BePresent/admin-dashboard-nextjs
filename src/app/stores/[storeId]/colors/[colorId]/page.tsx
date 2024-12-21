@@ -22,8 +22,9 @@ const UpdateColorPage = () => {
         name: values.name,
         code: values.code.toHexString(),
       });
-      message.success("Update color successfully!");
       router.push(`/stores/${storeId}/colors`);
+      router.refresh();
+      message.success("Update color successfully!");
     } catch (error) {
       console.log(error);
       message.error("Something went wrong!");
